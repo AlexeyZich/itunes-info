@@ -6,12 +6,12 @@ option:
 targets:
   DevTools:
     info:
-      path: Project/DevTools/Info.plist
+      path: Sources/DevTools/Info.plist
       properties:
         CFBundleDisplayName: DevTools
     type: framework
     sources: 
-      - path: Project/DevTools
+      - path: Sources/DevTools
     dependencies:
       - framework: Carthage/Build/Alamofire.xcframework
         codeSign: false
@@ -20,7 +20,7 @@ targets:
     deploymentTarget: 13.0
     settings:
       base:
-        INFOPLIST_FILE: Project/DevTools/Info.plist
+        INFOPLIST_FILE: Sources/DevTools/Info.plist
         MARKETING_VERSION: 1.0
 
 schemes:
