@@ -20,29 +20,29 @@ packages:
     from: 2.7.1
 
 configFiles:
-  Debug: Project/ItunesInfo/Configs/Debug.xcconfig
-  Release: Project/ItunesInfo/Configs/Release.xcconfig
+  Debug: Sources/ItunesInfo/Configs/Debug.xcconfig
+  Release: Sources/ItunesInfo/Configs/Release.xcconfig
 
 targets:
   ItunesInfo:
     info:
-      path: Project/ItunesInfo/Info.plist
+      path: Sources/ItunesInfo/Info.plist
       properties:
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UILaunchStoryboardName: LaunchScreen
         CFBundleDisplayName: ItunesInfo
         ROOT_URL: $(ROOT_URL)
     sources: 
-      - path: Project/ItunesInfo
+      - path: Sources/ItunesInfo
     type: application
     platform: iOS
     deploymentTarget: 13.0
     configFiles:
-      Debug: Project/ItunesInfo/Configs/Debug.xcconfig
-      Release: Project/ItunesInfo/Configs/Release.xcconfig
+      Debug: Sources/ItunesInfo/Configs/Debug.xcconfig
+      Release: Sources/ItunesInfo/Configs/Release.xcconfig
     settings:
       base:
-        INFOPLIST_FILE: Project/ItunesInfo/Info.plist
+        INFOPLIST_FILE: Sources/ItunesInfo/Info.plist
         MARKETING_VERSION: 1.0
     postCompileScripts:
       - script: |
@@ -59,7 +59,7 @@ targets:
       - framework: Carthage/Build/SnapKit.xcframework
 
     fileGroups:
-      - Project/Fora Soft Evaluation Tests (iOS) v2.2.pdf
+      - Sources/Fora Soft Evaluation Tests (iOS) v2.2.pdf
   
 
 schemes:
