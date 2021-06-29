@@ -1,0 +1,11 @@
+//
+//  Release.xcconfig
+//  ItunesInfo
+//
+//  Created by aleksejermolaev on 20.05.2021.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+$ROOT_URL = https:/$()/itunes.apple.com

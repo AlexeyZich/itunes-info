@@ -1,0 +1,34 @@
+name: DevTools
+option: 
+  findCarthageFrameworks: true
+  transitivelyLinkDependencies: true
+  
+targets:
+  DevTools:
+    info:
+      path: Project/DevTools/Info.plist
+      properties:
+        CFBundleDisplayName: DevTools
+    type: framework
+    sources: 
+      - path: Project/DevTools
+    dependencies:
+      - framework: Carthage/Build/Alamofire.xcframework
+        codeSign: false
+        platform: iOS
+    platform: iOS
+    deploymentTarget: 13.0
+    settings:
+      base:
+        INFOPLIST_FILE: Project/DevTools/Info.plist
+        MARKETING_VERSION: 1.0
+
+schemes:
+  DevTools:
+    build:
+      targets:
+        DevTools: [run, test]
+      run:
+        config: Debug
+      test:
+        config: Debug
