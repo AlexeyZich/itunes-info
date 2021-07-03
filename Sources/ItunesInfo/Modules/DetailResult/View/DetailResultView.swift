@@ -28,6 +28,8 @@ extension DetailResultView {
         let buttonHorizontalOffset = 16
         let buttonHeight = 50
         let buttonCornerRadius: CGFloat = 10
+
+        let indicatorTopOffset = 20
     }
 }
 
@@ -36,6 +38,12 @@ protocol DetailResultViewDelegate: AnyObject {
 }
 
 class DetailResultView: UIView {
+
+    private enum PlayerState {
+        case prepareToDownload
+        case play
+        case pause
+    }
 
     weak var delegate: DetailResultViewDelegate?
 
@@ -46,6 +54,8 @@ class DetailResultView: UIView {
     private let trackLabel = UILabel()
     private let button = UIButton()
     private let indicator = UIActivityIndicatorView(style: .large)
+    private var player: AVAudioPlayer?
+    private var state: PlayerState = .prepareToDownload
 
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
@@ -82,7 +92,8 @@ class DetailResultView: UIView {
             make.height.equalTo(appearance.buttonHeight)
         }
         indicator.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+            make.top.equalTo(button.snp.bottom).offset(appearance.indicatorTopOffset)
+            make.centerX.equalToSuperview()
         }
     }
 
@@ -125,7 +136,16 @@ class DetailResultView: UIView {
     }
 
     @objc private func didPlayPreview() {
-        delegate?.didPlayPreview()
+        switch state {
+        case .prepareToDownload:
+            delegate?.didPlayPreview()
+        case .play:
+            player?.pause()
+            state = .pause
+        case .pause:
+            player?.play()
+            state = .play
+        }
     }
 
     func loading(isStart: Bool) {
@@ -138,10 +158,13 @@ class DetailResultView: UIView {
 
     func startPlay(data: Data) {
         do {
-            let player = try AVAudioPlayer(data: data)
-            player.prepareToPlay()
-            player.volume = 1.0
-            player.play()
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            player = try AVAudioPlayer(data: data)
+            player?.prepareToPlay()
+            player?.volume = 1.0
+            player?.play()
+            state = .play
         } catch {
             print("AVAudioPlayer init failed")
         }

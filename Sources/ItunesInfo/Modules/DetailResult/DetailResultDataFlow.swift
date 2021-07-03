@@ -6,7 +6,7 @@
 import Foundation
 
 enum DetailResult {
-    
+
     enum Result {
         case result(SearchResults.Result)
         case loadingPreview

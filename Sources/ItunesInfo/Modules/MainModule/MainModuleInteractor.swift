@@ -21,7 +21,7 @@ class MainModuleInteractor: MainModuleBusinessLogic {
         self.presenter = presenter
         self.network = network
     }
-    
+
     // MARK: Do something
 
     func request() {
