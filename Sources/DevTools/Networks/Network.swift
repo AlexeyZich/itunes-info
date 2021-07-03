@@ -26,6 +26,7 @@ public enum NetworkErrors: Error {
     case emptyData
     case emptyParams
     case parseError(String)
+    case noConnection
 }
 
 public protocol NetworkProtocol {
@@ -36,12 +37,23 @@ public protocol NetworkProtocol {
 
 public class Network: NetworkProtocol {
     public let baseURL: URL
+    private let monitor: NetworkMonitorProtocol
 
-    public init(_ baseURL: URL) {
+    public init
+    (
+        baseURL: URL,
+        monitor: NetworkMonitorProtocol
+    ) {
         self.baseURL = baseURL
+        self.monitor = monitor
+        monitor.startMonitor()
     }
 
     public func makeRequest<T: Decodable>(to route: Router, completion: @escaping ((NetworkResult<T>) -> Void)) {
+        guard monitor.isConnected else {
+            completion(.failure(.noConnection))
+            return
+        }
         guard route.needParams, !route.params.isEmpty else {
             completion(.failure(.emptyParams))
             return
@@ -61,6 +73,10 @@ public class Network: NetworkProtocol {
     }
 
     public func downloadData(url: URL, completion: @escaping ((NetworkResult<Data>) -> Void)) {
+        guard monitor.isConnected else {
+            completion(.failure(.noConnection))
+            return
+        }
         let urlRequest = URLRequest(url: url)
         send(urlRequest) { data in
             DispatchQueue.main.async {
