@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import DevTools
 
 protocol MainModulePresentationLogic {
     func present(response: MainModule.Response)
@@ -24,6 +25,18 @@ class MainModulePresenter: MainModulePresentationLogic {
             self.viewController?.display(state: .displayResults(results))
             return
         case .error(let error):
+            handleError(error)
+        }
+    }
+
+    private func handleError(_ error: NetworkErrors) {
+        switch error {
+        case .emptyData:
+            return
+        case .noConnection:
+            self.viewController?.display(state: .displayError(error))
+            return
+        default:
             return
         }
     }

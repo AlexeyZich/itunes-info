@@ -17,10 +17,13 @@ class DI {
             let rootViewController = UINavigationController()
             return AppNavigator(rootViewController)
         }.inObjectScope(.container)
-        container.register(NetworkProtocol.self) { _ in
-            Network(Environment.rootURL)
+        container.register(NetworkMonitorProtocol.self) { _ in NetworkMonitor() }
+            .inObjectScope(.container)
+        container.register(NetworkProtocol.self) { resolver in
+            Network(
+                baseURL: Environment.rootURL,
+                monitor: resolver.resolve(NetworkMonitorProtocol.self)!
+            )
         }
-//        container.register(FileProviderProtocol?.self) { _ in
-//        }
     }
 }

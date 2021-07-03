@@ -45,12 +45,22 @@ extension MainModuleViewController: MainModuleDisplayLogic {
     func display(state: MainModule.ViewControllerState) {
         switch state {
         case .loading:
+            view = customView
             customView.loading(state: .loading)
         case .stopLoading:
+            view = customView
             customView.loading(state: .stopLoading)
         case .displayResults(let results):
             tableAdapter.update(viewModel: results)
         case .displayError(let error):
+            switch error {
+            case .noConnection:
+                let errorView = ErrorConnectionView()
+                errorView.delegate = self
+                view = errorView
+            default:
+                return
+            }
             return
         case .displayDetail(let detail):
             let config = DetailResultBuilder.Config(detail: detail)
@@ -62,5 +72,11 @@ extension MainModuleViewController: MainModuleDisplayLogic {
 extension MainModuleViewController: MainCollectionAdapterProtocol {
     func didSelect(_ result: SearchResults.Result) {
         display(state: .displayDetail(result))
+    }
+}
+
+extension MainModuleViewController: ErrorConnectionViewDelegate {
+    func didTryAgain() {
+        interactor.request()
     }
 }
