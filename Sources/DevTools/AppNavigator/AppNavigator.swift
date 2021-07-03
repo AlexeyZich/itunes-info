@@ -9,18 +9,18 @@ import UIKit
 
 public protocol AppNavigatorProtocol {
     var navigationController: UINavigationController { get }
-    func push(to module: ModuleBuilder, animated: Bool )
+    func push(to module: ModuleBuilder, animated: Bool)
     func popToRoot(animated: Bool)
 }
 
 public class AppNavigator: AppNavigatorProtocol {
 
     public let navigationController: UINavigationController
-    
+
     public init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
+
     public func push(to module: ModuleBuilder, animated: Bool = true) {
         let controller = module.build()
         navigationController.pushViewController(controller, animated: animated)

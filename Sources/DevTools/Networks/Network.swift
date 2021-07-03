@@ -61,7 +61,8 @@ public class Network: NetworkProtocol {
     }
 
     public func downloadData(url: URL, completion: @escaping ((NetworkResult<Data>) -> Void)) {
-        send(url) { data in
+        let urlRequest = URLRequest(url: url)
+        send(urlRequest) { data in
             DispatchQueue.main.async {
                 completion(data)
             }
@@ -85,13 +86,13 @@ public class Network: NetworkProtocol {
             do {
                 let result = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(result))
-            } catch (let error) {
+            } catch let error {
                 completion(.failure(.parseError(error.localizedDescription)))
             }
         }
     }
 
-    private func send(_ request: URL, completion: @escaping ((NetworkResult<Data>) -> Void)) {
+    private func send(_ request: URLRequest, completion: @escaping ((NetworkResult<Data>) -> Void)) {
         AF.request(request).responseJSON { response in
             guard let statusCode = response.response?.statusCode else {
                 completion(.failure(.unknown))

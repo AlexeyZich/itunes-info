@@ -31,7 +31,6 @@ class MainModuleViewController: BaseViewController {
         customView = MainModuleView(frame: UIScreen.main.bounds,
                                   collectionView: tableAdapter.collectionView)
         view = self.customView
-        customView.delegate = self
     }
 
     override func viewDidLoad() {
@@ -57,12 +56,6 @@ extension MainModuleViewController: MainModuleDisplayLogic {
             let config = DetailResultBuilder.Config(detail: detail)
             appNavigator.push(to: DetailResultBuilder(config), animated: true)
         }
-    }
-}
-
-extension MainModuleViewController: MainModuleViewDelegate {
-    func didPressed() {
-        appNavigator.push(to: SecondModuleBuilder(), animated: true)
     }
 }
 

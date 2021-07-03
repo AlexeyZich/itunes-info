@@ -15,7 +15,7 @@ public protocol FileProviderProtocol {
     func createDirectoryIfNeeded() throws
     func fileExists(by path: String) -> Bool
     func getContentFromFile(by path: String) -> Data?
-    func write(data: Data, with path: String) -> Data?
+    func write(data: Data, with path: String) -> Bool
 }
 
 public enum FileProviderError: Error {
@@ -32,7 +32,7 @@ public class FileProvider: FileProviderProtocol {
 
     required public init?(component path: String) {
         self.path = path
-        self.searchPathDirectory = .libraryDirectory
+        self.searchPathDirectory = .documentDirectory
         self.domainMask = .userDomainMask
         self.fileManager = Foundation.FileManager.default
         do {
@@ -53,7 +53,8 @@ public class FileProvider: FileProviderProtocol {
         self.dataPath = dataPath
         if !fileManager.fileExists(atPath: dataPath.path) {
             do {
-                try fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(atPath: dataPath.path,
+                                                withIntermediateDirectories: true, attributes: nil)
                 print("directory created at \(dataPath)")
             } catch {
                 throw FileProviderError.notCreate(error.localizedDescription)
@@ -78,15 +79,14 @@ public class FileProvider: FileProviderProtocol {
         }
     }
 
-    public func write(data: Data, with path: String) -> Data? {
-        guard let dataPath = dataPath else { return nil }
+    public func write(data: Data, with path: String) -> Bool {
+        guard let dataPath = dataPath else { return false }
         let filePath = dataPath.appendingPathComponent(path)
         do {
-            try fileManager.createFile(atPath: filePath.path, contents: data, attributes: nil)
-            return getContentFromFile(by: path)
+            return try fileManager.createFile(atPath: filePath.path, contents: data, attributes: nil)
         } catch {
             print(error.localizedDescription)
-            return nil
+            return false
         }
     }
 }

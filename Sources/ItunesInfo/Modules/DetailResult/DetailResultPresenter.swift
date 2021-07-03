@@ -33,8 +33,6 @@ class DetailResultPresenter: DetailResultPresentationLogic {
         switch error {
         case .dataNotFound:
             return
-        case .fileNotWrite:
-            return
         case .fileProviderNil:
             return
         default:

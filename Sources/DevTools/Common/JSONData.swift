@@ -22,7 +22,7 @@ extension Encodable {
             let json = try JSONSerialization.jsonObject(with: jsonData(), options: [])
             guard let dict = json as? [String: String] else { return [:] }
             return dict
-        } catch (let error) {
+        } catch let error {
             print(error.localizedDescription)
             return [:]
         }

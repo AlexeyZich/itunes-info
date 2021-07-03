@@ -11,13 +11,13 @@ class MainModuleBuilder: ModuleBuilder {
     var initialState: MainModule.ViewControllerState?
 
     required init() {
-        
+
     }
 
     func set(initialState: MainModule.ViewControllerState) -> MainModuleBuilder {
         self.initialState = initialState
         return self
-    } 
+    }
 
     func build() -> UIViewController {
         let presenter = MainModulePresenter()

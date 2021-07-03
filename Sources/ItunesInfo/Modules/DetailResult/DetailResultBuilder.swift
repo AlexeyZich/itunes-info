@@ -10,7 +10,7 @@ class DetailResultBuilder: ModuleBuilder {
     required init() {
         fatalError("Config not set")
     }
-    
+
     struct Config {
         let detail: SearchResults.Result
     }

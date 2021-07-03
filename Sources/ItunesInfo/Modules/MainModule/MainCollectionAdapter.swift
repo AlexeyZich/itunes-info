@@ -15,7 +15,7 @@ final class MainCollectionAdapter: NSObject {
 
     var collectionView: UICollectionView
     weak var delegate: MainCollectionAdapterProtocol?
-    
+
     private var viewModel: SearchResults?
     private let reuseIdentifier: String
 

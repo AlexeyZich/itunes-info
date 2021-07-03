@@ -6,7 +6,7 @@
 import DevTools
 
 enum MainModule {
-    
+
     enum Response {
         case loading
         case stopLoading

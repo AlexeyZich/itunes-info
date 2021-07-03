@@ -13,17 +13,11 @@ extension MainModuleView {
     }
 }
 
-protocol MainModuleViewDelegate: class {
-    func didPressed()
-}
-
 class MainModuleView: UIView {
     enum State {
         case loading
         case stopLoading
     }
-    
-    weak var delegate: MainModuleViewDelegate?
 
     private var collectionView: UICollectionView
     private let appearance = Appearance()
@@ -69,17 +63,7 @@ class MainModuleView: UIView {
     func configure() {
         self.backgroundColor = .white
 
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = appearance.cornerRadius
-        button.backgroundColor = .purple
-        button.setTitle("Tap to next", for: .normal)
-        button.addTarget(self, action: #selector(didTapNextModule), for: .touchUpInside)
-
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.color = .red
-    }
-
-    @objc private func didTapNextModule() {
-        delegate?.didPressed()
     }
 }
