@@ -32,12 +32,41 @@ class MainModulePresenter: MainModulePresentationLogic {
     private func handleError(_ error: NetworkErrors) {
         switch error {
         case .emptyData:
-            return
+            let baseError = BaseErrorModel(
+                title: "Что-то пошло не так",
+                message: "Сервер вернул пустые данные, повторите запрос"
+            )
+            self.viewController?.display(state: .displayError(baseError))
         case .noConnection:
-            self.viewController?.display(state: .displayError(error))
-            return
-        default:
-            return
+            let baseError = BaseErrorModel(
+                title: "Нет подключения к сети",
+                message: "Проверьте подключение к сети и повторите запрос"
+            )
+            self.viewController?.display(state: .displayError(baseError))
+        case .serverError:
+            let baseError = BaseErrorModel(
+                title: "Ошибка сервера",
+                message: "Повторите запрос"
+            )
+            self.viewController?.display(state: .displayError(baseError))
+        case .emptyParams:
+            let baseError = BaseErrorModel(
+                title: "Что-то пошло не так",
+                message: "Проверьте параметры и повторите запрос"
+            )
+            self.viewController?.display(state: .displayError(baseError))
+        case .unknown:
+            let baseError = BaseErrorModel(
+                title: "Что-то пошло не так",
+                message: "Попробуйте повторить запрос"
+            )
+            self.viewController?.display(state: .displayError(baseError))
+        case .parseError:
+            let baseError = BaseErrorModel(
+                title: "Что-то пошло не так",
+                message: ""
+            )
+            self.viewController?.display(state: .displayError(baseError))
         }
     }
 }
