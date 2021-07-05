@@ -17,7 +17,7 @@ enum MainModule {
         case loading
         case stopLoading
         case displayResults(SearchResults)
-        case displayError(NetworkErrors)
+        case displayError(BaseErrorProtocol)
         case displayDetail(SearchResults.Result)
     }
 }
