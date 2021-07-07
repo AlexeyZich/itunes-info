@@ -27,7 +27,13 @@ private extension BaseErrorView {
     }
 }
 
+protocol BaseErrorViewDelegate: AnyObject {
+    func didPressCloseButton()
+}
+
 final class BaseErrorView: UIView {
+
+    weak var delegate: BaseErrorViewDelegate?
 
     private let appearance = Appearance()
     /// Добавить изображение для красоты
@@ -85,11 +91,16 @@ final class BaseErrorView: UIView {
         button.setTitleColor(appearance.buttonTitleColor, for: .normal)
         button.backgroundColor = appearance.buttonColor
         button.layer.cornerRadius = appearance.buttonCornerRadius
+        button.addTarget(self, action: #selector(didTryAgain), for: .touchUpInside)
     }
 
     func set(model: BaseErrorProtocol) {
         titleLabel.text = model.title
         messageLabel.text = model.message
         button.setTitle("Повторить", for: .normal)
+    }
+
+    @objc func didTryAgain() {
+        delegate?.didPressCloseButton()
     }
 }

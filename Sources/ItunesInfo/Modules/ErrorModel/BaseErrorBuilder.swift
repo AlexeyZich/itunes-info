@@ -12,6 +12,7 @@ final class BaseErrorBuilder: ModuleBuilder {
 
     struct Config {
         let model: BaseErrorProtocol
+        let completion: (() -> Void)?
     }
     let config: Config
 

@@ -24,11 +24,20 @@ final class BaseErrorViewController: BaseViewController {
 
     override func loadView() {
         super.loadView()
+        customView.delegate = self
         view = customView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         customView.set(model: config.model)
+    }
+}
+
+extension BaseErrorViewController: BaseErrorViewDelegate {
+    func didPressCloseButton() {
+        appNavigator.dissmis { [weak self] in
+            self?.config.completion?()
+        }
     }
 }
