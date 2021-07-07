@@ -13,14 +13,21 @@ extension MainModuleView {
     }
 }
 
+protocol MainModuleViewDelegate: AnyObject {
+    func didRefresh()
+}
+
 class MainModuleView: UIView {
     enum State {
         case loading
         case stopLoading
     }
 
+    weak var delegate: MainModuleViewDelegate?
+
     private var collectionView: UICollectionView
     private let appearance = Appearance()
+    private let refreshControl = UIRefreshControl()
     private let button = UIButton()
     private let indicator = UIActivityIndicatorView(style: .large)
 
@@ -65,5 +72,17 @@ class MainModuleView: UIView {
 
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.color = .red
+
+        collectionView.refreshControl = refreshControl
+
+        refreshControl.addTarget(self, action: #selector(refreshAction), for: .valueChanged)
+    }
+
+    func didRefreshEnd() {
+        refreshControl.endRefreshing()
+    }
+
+    @objc func refreshAction() {
+        delegate?.didRefresh()
     }
 }

@@ -31,13 +31,13 @@ class MainModuleViewController: BaseViewController {
         customView = MainModuleView(frame: UIScreen.main.bounds,
                                   collectionView: tableAdapter.collectionView)
         view = self.customView
+        customView.delegate = self
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         interactor.request()
     }
-
 }
 
 extension MainModuleViewController: MainModuleDisplayLogic {
@@ -51,9 +51,12 @@ extension MainModuleViewController: MainModuleDisplayLogic {
             view = customView
             customView.loading(state: .stopLoading)
         case .displayResults(let results):
+            customView.didRefreshEnd()
             tableAdapter.update(viewModel: results)
         case .displayError(let model):
-            let config = BaseErrorBuilder.Config(model: model)
+            let config = BaseErrorBuilder.Config(model: model) { [weak self] in
+                self?.interactor.request()
+            }
             let module = BaseErrorBuilder(config: config)
             appNavigator.present(builder: module, animated: true, completion: nil)
         case .displayDetail(let detail):
@@ -66,5 +69,10 @@ extension MainModuleViewController: MainModuleDisplayLogic {
 extension MainModuleViewController: MainCollectionAdapterProtocol {
     func didSelect(_ result: SearchResults.Result) {
         display(state: .displayDetail(result))
+    }
+}
+extension MainModuleViewController: MainModuleViewDelegate {
+    func didRefresh() {
+        interactor.request()
     }
 }
